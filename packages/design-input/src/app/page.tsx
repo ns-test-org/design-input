@@ -24,6 +24,8 @@ const slogans = [
 export default function Landing() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
+  const [inputValue, setInputValue] = useState('');
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -63,6 +65,70 @@ export default function Landing() {
             {slogans[currentIndex]}
           </span>
         </div>
+
+        {/* Design Input Box */}
+        <div className="mt-12 w-full max-w-2xl">
+          <div className={`relative group transition-all duration-300 ${
+            isFocused ? 'scale-[1.02]' : 'scale-100'
+          }`}>
+            {/* Glow effect on focus */}
+            <div className={`absolute -inset-1 bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 ${
+              isFocused ? 'opacity-50' : ''
+            }`} />
+            
+            {/* Input container */}
+            <div className="relative bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden">
+              {/* Animated border gradient */}
+              <div className={`absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 opacity-0 transition-opacity duration-300 ${
+                isFocused ? 'opacity-20' : ''
+              }`} />
+              
+              <div className="relative flex items-center gap-4 p-6">
+                {/* Icon */}
+                <div className="flex-shrink-0">
+                  <svg 
+                    className="w-6 h-6 text-white/60" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </div>
+                
+                {/* Input field */}
+                <input
+                  type="text"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  placeholder="Describe what you want to build..."
+                  className="flex-1 bg-transparent text-white placeholder-white/40 text-lg outline-none"
+                />
+                
+                {/* Submit button */}
+                <button 
+                  className={`flex-shrink-0 px-6 py-3 rounded-xl font-medium transition-all duration-300 ${
+                    inputValue.trim() 
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:shadow-purple-500/50 hover:scale-105' 
+                      : 'bg-white/5 text-white/30 cursor-not-allowed'
+                  }`}
+                  disabled={!inputValue.trim()}
+                >
+                  Create
+                </button>
+              </div>
+              
+              {/* Character count */}
+              {inputValue.length > 0 && (
+                <div className="px-6 pb-4 text-xs text-white/40">
+                  {inputValue.length} characters
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </main>
       
       {/* Start Prompting arrow pointing left - bottom left */}
@@ -82,3 +148,4 @@ export default function Landing() {
     </div>
   );
 }
+
